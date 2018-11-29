@@ -1,40 +1,84 @@
 <template>
-<div class="login">
+  <div class="login">
     <div class="container">
-        <img src="../assets/avatar.jpg" alt="" class="avatar">
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
-                <el-form-item  prop="name">
-                   <el-input v-model="ruleForm.username" placeholder="用户名" prefix-icon="myicon myicon-user"></el-input>
-                </el-form-item>
-                <el-form-item  prop="pass">
-                   <el-input v-model="ruleForm.password" placeholder="密码 " prefix-icon="myicon myicon-key" ></el-input>
-                </el-form-item>
-            </el-form>
-  <el-row>
-      <el-button type="primary" class="login-btn ">登录</el-button>
-  </el-row>
+      <img
+        src="../assets/avatar.jpg"
+        alt=""
+        class="avatar"
+      >
+      <el-form
+        :model="ruleForm"
+        :rules="rules"
+        ref="ruleForm"
+        class="demo-ruleForm"
+      >
+        <el-form-item prop="username">
+          <el-input
+            v-model="ruleForm.username"
+            placeholder="用户名"
+            prefix-icon="myicon myicon-user"
+          ></el-input>
+        </el-form-item>
+        <el-form-item prop="password">
+          <el-input
+            type="password"
+            v-model="ruleForm.password"
+            placeholder="密码 "
+            prefix-icon="myicon myicon-key"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <el-row>
+        <el-button
+          type="primary"
+          class="login-btn"
+          @click="submitForm('ruleForm')"
+        >登录</el-button>
+      </el-row>
     </div>
-</div>
+  </div>
 </template>
 <script>
-export default{
+import { login } from '@/api/index.js'
+export default {
   data () {
     return {
       ruleForm: {
         username: '',
         password: ''
-
       },
       rules: {
-        name: [
+        username: [
           { required: true, message: '请输入正确用户名', trigger: 'blur' }
-
         ],
-        pass: [
+        password: [
           { required: true, message: '请输入正确密码', trigger: 'blur' }
-
         ]
       }
+    }
+  },
+  methods: {
+    submitForm (formName) {
+      // 实现用户输入的验证，如果用户输入不合法，则取消当前的请求
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          // 调用接口，发送请求
+          login(this.ruleForm).then(res => {
+            if (res.meta.status === 200) {
+              console.log(res)
+              // 登录的时候把token存到本地储存里面
+              localStorage.setItem('userToken', JSON.stringify(res.data.token))
+              //   实现跳转
+              this.$router.push('/Index')
+            } else {
+              this.$message.error(res.meta.msg)
+            }
+          })
+        } else {
+          this.$message.error('登录失败，输入数据不完整')
+          return false
+        }
+      })
     }
   }
 }

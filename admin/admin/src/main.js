@@ -10,6 +10,15 @@ import './styles/index.scss'
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 
+router.beforeEach((to, from, next) => {
+  // console.log(to)
+  var token = localStorage.getItem('userToken')
+  if (token || to.path === '/login') {
+    next()
+  } else {
+    next({ path: '/login' })
+  }
+})
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
