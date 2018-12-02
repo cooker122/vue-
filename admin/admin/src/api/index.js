@@ -33,8 +33,51 @@ export const login = (param) => {
     })
 }
 // 登录验证接口方法
-export const users = (param) => {
-  return axios.get('users', param)
+export const users = (psa) => {
+  return axios.get('users', {params: psa})
+    .then((res) => {
+      return res.data
+    })
+}
+export const menusList = () => {
+  return axios.get('menus')
+    .then((res) => {
+      return res.data
+    })
+}
+// 添加用户
+
+export const addNsers = (psa) => {
+  return axios.post('users', psa)
+    .then((res) => {
+      return res.data
+    })
+}
+// 修改用户状态
+export const editStatus = (psa) => {
+  return axios.post(`users/${psa.id}/state/${psa.type}`, psa)
+    .then((res) => {
+      return res.data
+    })
+}
+
+// 编辑用户信息
+export const editNsers = (psa) => {
+  return axios.put(`users/${psa.id}`, psa)
+    .then((res) => {
+      return res.data
+    })
+}
+// 编辑用户信息
+export const deleteNsers = (id) => {
+  return axios.delete(`users/${id}`, id)
+    .then((res) => {
+      return res.data
+    })
+}
+// 获取商品数据
+export const goodsList = (type) => {
+  return axios.get('categories', type)
     .then((res) => {
       return res.data
     })

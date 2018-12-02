@@ -40,6 +40,7 @@
 </template>
 <script>
 import { login } from '@/api/index.js'
+// import { users } from '@/api/index.js'
 export default {
   data () {
     return {
@@ -65,11 +66,11 @@ export default {
           // 调用接口，发送请求
           login(this.ruleForm).then(res => {
             if (res.meta.status === 200) {
-              console.log(res)
+              // console.log(res),
               // 登录的时候把token存到本地储存里面
-              localStorage.setItem('userToken', JSON.stringify(res.data.token))
+              localStorage.setItem('userToken', res.data.token)
               //   实现跳转
-              this.$router.push('/Index')
+              this.$router.push('/index')
             } else {
               this.$message.error(res.meta.msg)
             }
