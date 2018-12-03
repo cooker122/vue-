@@ -63,7 +63,7 @@
             v-model="scope.row.mg_state"
             active-color="#13ce66"
             inactive-color="#ff4949"
-
+            @change="editStatu(scope.row)"
           >
           </el-switch>
         </template>
@@ -88,13 +88,15 @@
             plain
           ></el-button>
                 </el-tooltip>
+                 <el-tooltip content="编辑" placement="top">
           <el-button
             size="mini"
             type="info"
-            @click="handleShare( scope.$index,scope.row )"
+            @click="showShare( scope.$index,scope.row )"
             icon="el-icon-share"
             plain
           ></el-button>
+                 </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
@@ -150,12 +152,32 @@
     <el-button type="primary" @click="editForm('editform')">确 定</el-button>
   </div>
 </el-dialog>
-
+  <!-- 授权 -->
+  <el-dialog title="分配角色" :visible.sync="shouForm">
+  <el-form  :model="showform" :rules="rules" ref="showform" label-width="100px">
+    <el-form-item label="用户名：">
+      <el-input v-model="showform.username" autocomplete="off" :disabled='true'></el-input>
+    </el-form-item>
+    <el-form-item label="活动区域" >
+      <el-select v-model="showform.rid" placeholder="请选择的角色" >
+           <el-option
+      v-for="item in rolesListdata"
+      :key="item.id"
+      :label="item.roleName"
+      :value="item.id">
+    </el-option>
+      </el-select>
+    </el-form-item>
+  </el-form>
+  <div slot="footer" class="dialog-footer">
+    <el-button @click="shouForm = false">取 消</el-button>
+    <el-button type="primary" @click="allotRole">确 定</el-button>
+  </div>
+  </el-dialog>
   </div>
 </template>
 <script>
-import { users, addNsers, editNsers, deleteNsers } from '@/api'
-
+import {users, addNsers, editNsers, deleteNsers, rolesList, editStatus, getId, allotRoles} from '@/api'
 export default {
   data () {
     return {
@@ -169,8 +191,13 @@ export default {
         email: '',
         mobile: '',
         id: ''},
+      showform: {
+        username: '',
+        id: '',
+        rid: '0'},
       dialogFormVisible: false,
       editFormVisible: false,
+      shouForm: false,
       //   Eid: '',
       input1: '',
       total: 1,
@@ -179,6 +206,8 @@ export default {
       pagenum: 1,
       pagesize: 10,
       userData: [],
+      value: '',
+      rolesListdata: [],
       rules: {
         username: [
           { required: true, message: '请输入用户名', trigger: 'blur' }
@@ -240,8 +269,63 @@ export default {
         })
       })
     },
-    handleShare (index, row) {
+    // 选择角色
+    allotRole () {
+      // console.log(1111)
+      allotRoles(this.showform).then(res => {
+        console.log(res)
+        if (res.meta.status === 200) {
+          this.showform.rid = res.data.rid
+          this.shouForm = false
+          this.$message({
+            type: 'success',
+            message: '分配角色成功'
+          })
+        } else {
+          this.$message({
+            type: 'warning',
+            message: '分配角色失败'
+          })
+        }
+      })
+    },
+    // 分配角色
+    showShare (index, row) {
       console.log(index, row)
+      this.shouForm = true
+      this.showform.username = row.username
+      this.showform.id = row.id
+      // 获取角色信息
+      rolesList().then(res => {
+        if (res.meta.status === 200) {
+          this.rolesListdata = res.data
+        }
+      })
+      // 通过id获取到rid
+      getId(this.showform.id).then(res => {
+        console.log(res)
+        if (res.meta.status === 200) {
+          this.showform.rid = res.data.rid
+        }
+      })
+    },
+    // 修改状态
+    editStatu (row) {
+      console.log(row)
+      editStatus(row.id, row.mg_state).then(res => {
+        console.log(res)
+        if (res.meta.status === 200) {
+          this.$message({
+            type: 'success',
+            message: res.meta.msg
+          })
+        } else {
+          this.$message({
+            type: 'warning',
+            message: res.meta.msg
+          })
+        }
+      })
     },
     handleSizeChange (val) {
       console.log(`每页 ${val} 条`)

@@ -11,7 +11,7 @@
     >添加用户</el-button>
     <!-- 表格内容 -->
     <el-table
-      :data="tableData5"
+      :data="rightData"
       style="width: 100%"
       border
     >
@@ -22,43 +22,35 @@
             inline
             class="demo-table-expand"
           >
-            <el-form-item label="商品名称">
-              <span>{{ props.row.name }}</span>
-            </el-form-item>
-            <el-form-item label="所属店铺">
-              <span>{{ props.row.shop }}</span>
-            </el-form-item>
-            <el-form-item label="商品 ID">
-              <span>{{ props.row.id }}</span>
-            </el-form-item>
-            <el-form-item label="店铺 ID">
-              <span>{{ props.row.shopId }}</span>
-            </el-form-item>
-            <el-form-item label="商品分类">
-              <span>{{ props.row.category }}</span>
-            </el-form-item>
-            <el-form-item label="店铺地址">
-              <span>{{ props.row.address }}</span>
-            </el-form-item>
-            <el-form-item label="商品描述">
-              <span>{{ props.row.desc }}</span>
-            </el-form-item>
+            <el-row :gutter="24">
+              <el-col :span="4">
+                <el-tag
+                  v-for="tag in  props.row.children"
+                  :key="tag.authName"
+                  closable
+                  type=""
+                  class="grid-content bg-purple"
+                >
+                  {{tag.authName}}
+                </el-tag>
+              </el-col>
+            </el-row>
           </el-form>
         </template>
       </el-table-column>
-       <el-table-column
+      <el-table-column
         type="index"
         width="50"
       >
       </el-table-column>
       <el-table-column
         label="角色名称"
-        prop="id"
+        prop="roleName"
       >
       </el-table-column>
       <el-table-column
         label="描述"
-        prop="name"
+        prop="roleDesc"
       >
       </el-table-column>
       <el-table-column label="操作">
@@ -91,53 +83,50 @@
 
 </template>
 <script>
+import { rolesList } from '@/api'
 export default {
   data () {
     return {
-      tableData5: [
-        {
-          id: '12987122',
-          name: '好滋好味鸡蛋仔',
-          category: '江浙小吃、小吃零食',
-          desc: '荷兰优质淡奶，奶香浓而不腻',
-          address: '上海市普陀区真北路',
-          shop: '王小虎夫妻店',
-          shopId: '10333'
-        },
-        {
-          id: '12987123',
-          name: '好滋好味鸡蛋仔',
-          category: '江浙小吃、小吃零食',
-          desc: '荷兰优质淡奶，奶香浓而不腻',
-          address: '上海市普陀区真北路',
-          shop: '王小虎夫妻店',
-          shopId: '10333'
-        },
-        {
-          id: '12987125',
-          name: '好滋好味鸡蛋仔',
-          category: '江浙小吃、小吃零食',
-          desc: '荷兰优质淡奶，奶香浓而不腻',
-          address: '上海市普陀区真北路',
-          shop: '王小虎夫妻店',
-          shopId: '10333'
-        },
-        {
-          id: '12987126',
-          name: '好滋好味鸡蛋仔',
-          category: '江浙小吃、小吃零食',
-          desc: '荷兰优质淡奶，奶香浓而不腻',
-          address: '上海市普陀区真北路',
-          shop: '王小虎夫妻店',
-          shopId: '10333'
-        }
-      ]
+      rightData: [],
+      rightData1: []
     }
-  }
+  },
+  mounted () {
+    rolesList().then(res => {
+      if (res.meta.status === 200) {
+        console.log(res)
+        this.rightData = res.data
+        // this.rightData1=res.data
+      }
+    })
+  },
+  methods: {}
 }
 </script>
-<style>
+<style lang='scss' scoped>
 .box {
+  width: 100%;
   margin: 20px 20px 0;
+  overflow: scroll;
+  .el-row {
+    margin-bottom: 20px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  .el-col {
+    border-radius: 4px;
+  }
+  .grid-content {
+    border-radius: 4px;
+    min-height: 36px;
+  }
+  .bg-purple {
+    // background: #d3dce6;
+    margin-bottom: 30px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
 }
 </style>

@@ -27,34 +27,49 @@
         width="180"
       >
       </el-table-column>
+
       <el-table-column
-        prop="order"
+        prop= "level"
         label="层级"
         width="80"
       >
-      </el-table-column>
-       <el-table-column
+      <template
+      slot-scope="slotProps"
       >
+        <span>{{slotProps.row.level | levels}}</span>
+      </template>
       </el-table-column>
     </el-table>
   </div>
 </template>
 <script>
-import {menusList} from '@/api'
+import {rightsList} from '@/api'
 export default {
   data () {
     return {
+
       rolesList: []
     }
   },
+
   mounted () {
-    menusList().then(res => {
+    rightsList('list').then(res => {
       console.log(res)
       if (res.meta.status === 200) {
         this.rolesList = res.data
       }
     })
   },
+  filters: {
+    levels: function (level) {
+      if (level === '0') {
+        return '一级'
+      } else if (level === '1') {
+        return '二级'
+      } else if (level === '2') {
+        return '三级'
+      }
+    } },
   methods: {
     // init () {
 
@@ -62,9 +77,11 @@ export default {
   }
 
 }
+
 </script>
 <style>
 .box{
     margin: 20px 20px 0;
+    overflow: scroll;
 }
 </style>

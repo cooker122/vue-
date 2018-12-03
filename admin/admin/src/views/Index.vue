@@ -1,5 +1,5 @@
 <template>
-  <el-container class="home ">
+  <el-container class="home">
     <el-aside width="auto">
       <div>
         <div
@@ -81,13 +81,14 @@
               </el-menu-item>
           </el-submenu>
         </el-menu>
+
       </div>
     </el-aside>
     <el-container>
       <el-header>
         <a href="javascript:;" class="myicon myicon-menu toggle-btn" @click='isCollapse=!isCollapse'></a>
         <div class="system-title">欢迎来到管理系统 </div>
-        <div class="welcome">欢迎你***<span>退出</span></div>
+        <div class="welcome">欢迎你: <img src="../assets/bunny_cc1e937.gif" alt=""><span clas='name'>陈十三  </span><span>退出</span></div>
       </el-header>
       <router-view></router-view>
 
@@ -134,6 +135,7 @@ export default {
   }
   .el-header {
     display: flex;
+    // top: 0;
     justify-content: space-between;
     align-items: center;
     background-color: #545c64;
@@ -163,7 +165,13 @@ export default {
     color: white;
   }
   .welcome {
-    color: white;
+    color: #ccc;
+    img{
+      width: 40px;
+    }
+    .name{
+      color: white!important
+    }
   }
 }
 </style>

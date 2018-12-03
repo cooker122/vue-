@@ -39,14 +39,21 @@ export const users = (psa) => {
       return res.data
     })
 }
+// 左侧菜单权限
 export const menusList = () => {
   return axios.get('menus')
     .then((res) => {
       return res.data
     })
 }
+// 所以权限列表
+export const rightsList = (type) => {
+  return axios.get(`rights/${type}`)
+    .then((res) => {
+      return res.data
+    })
+}
 // 添加用户
-
 export const addNsers = (psa) => {
   return axios.post('users', psa)
     .then((res) => {
@@ -54,8 +61,8 @@ export const addNsers = (psa) => {
     })
 }
 // 修改用户状态
-export const editStatus = (psa) => {
-  return axios.post(`users/${psa.id}/state/${psa.type}`, psa)
+export const editStatus = (uid, type) => {
+  return axios.put(`users/${uid}/state/${type}`)
     .then((res) => {
       return res.data
     })
@@ -68,16 +75,52 @@ export const editNsers = (psa) => {
       return res.data
     })
 }
-// 编辑用户信息
+// 删除用户信息
 export const deleteNsers = (id) => {
-  return axios.delete(`users/${id}`, id)
+  return axios.delete(`users/${id}`)
     .then((res) => {
       return res.data
     })
 }
+// 获取角色数据
+export const rolesList = () => {
+  return axios.get('roles')
+    .then((res) => {
+      return res.data
+    })
+}
+// 分配角色数据
+export const allotRoles = (psa) => {
+  return axios.put(`users/${psa.id}/role`, psa)
+    .then((res) => {
+      return res.data
+    })
+}
+// 根据id获取数据
+export const getId = (id) => {
+  return axios.get(`users/${id}`)
+    .then((res) => {
+      return res.data
+    })
+}
+
 // 获取商品数据
-export const goodsList = (type) => {
-  return axios.get('categories', type)
+export const goodsList = (psa) => {
+  return axios.get('goods', {params: psa})
+    .then((res) => {
+      return res.data
+    })
+}
+// 编辑商品数据
+export const editGoods = (psa) => {
+  return axios.put(`goods/${psa.id}`, psa)
+    .then((res) => {
+      return res.data
+    })
+}
+// 删除商品信息
+export const deleteGoods = (id) => {
+  return axios.delete(`users/${id}`)
     .then((res) => {
       return res.data
     })
