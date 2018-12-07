@@ -82,6 +82,13 @@ export const deleteNsers = (id) => {
       return res.data
     })
 }
+// 添加角色
+export const addRoles = (psa) => {
+  return axios.post('roles', psa)
+    .then((res) => {
+      return res.data
+    })
+}
 // 获取角色数据
 export const rolesList = () => {
   return axios.get('roles')
@@ -92,6 +99,34 @@ export const rolesList = () => {
 // 分配角色数据
 export const allotRoles = (psa) => {
   return axios.put(`users/${psa.id}/role`, psa)
+    .then((res) => {
+      return res.data
+    })
+}
+// 删除角色信息
+export const deleteRoles = (roleId) => {
+  return axios.delete(`roles/${roleId}`)
+    .then((res) => {
+      return res.data
+    })
+}
+// 编辑角色信息
+export const editRoles = (psa) => {
+  return axios.put(`roles/${psa.id}`, psa)
+    .then((res) => {
+      return res.data
+    })
+}
+// 角色权限设置
+export const setRights = (roleId, rids) => {
+  return axios.post(`roles/${roleId}/rights`, {rids})
+    .then((res) => {
+      return res.data
+    })
+}
+// 删除权限信息
+export const deleteRights = (roleId, rightId) => {
+  return axios.delete(`roles/${roleId}/rights/${rightId}`)
     .then((res) => {
       return res.data
     })
@@ -120,7 +155,42 @@ export const editGoods = (psa) => {
 }
 // 删除商品信息
 export const deleteGoods = (id) => {
-  return axios.delete(`users/${id}`)
+  return axios.delete(`goods/${id}`)
+    .then((res) => {
+      return res.data
+    })
+}
+// 根据id获取数据
+export const getGoods = (id) => {
+  return axios.get(`goods/${id}`)
+    .then((res) => {
+      return res.data
+    })
+}
+// 获取商品分类列表
+export const getGoodsList = (params) => {
+  return axios.get('categories', {params: {'type': params}})
+    .then((res) => {
+      return res.data
+    })
+}
+// 添加商品分类列表
+export const addCategories = (psa) => {
+  return axios.post('categories', psa)
+    .then((res) => {
+      return res.data
+    })
+}
+// 添加商品列表
+export const addCategoods = (psa) => {
+  return axios.post('goods', psa)
+    .then((res) => {
+      return res.data
+    })
+}
+// 删除商品信息
+export const deleteCategories = (id) => {
+  return axios.delete(`categories/${id}`)
     .then((res) => {
       return res.data
     })

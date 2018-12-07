@@ -70,7 +70,7 @@ export default {
               // 登录的时候把token存到本地储存里面
               localStorage.setItem('userToken', res.data.token)
               //   实现跳转
-              this.$router.push('/index')
+              this.$router.push('/')
             } else {
               this.$message.error(res.meta.msg)
             }

@@ -8,13 +8,19 @@ import Nav from '@/views/User/Nav'
 import Roles from '@/views/rights/Roles'
 import Rights from '@/views/rights/Rights'
 import List from '@/views/goods/List'
+import Add from '@/views/goods/Add'
+import Categories from '@/views/goods/Categories'
+import Params from '@/views/goods/Params'
+import Goods from '@/views/goods/goods'
+import Orders from '@/views/orders/Orders'
+import Reports from '@/views/reports/reports'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path: '/',
+      path: '/helloWorld',
       name: 'HelloWorld',
       component: HelloWorld,
       redirect: '/login'
@@ -25,36 +31,72 @@ export default new Router({
       component: Login
     },
     {
-      path: '/index',
+      path: '/',
       name: 'Index',
       component: Index,
-      redirect: '/Nav',
+      redirect: 'home',
       children: [{
-        path: '/nav',
+        path: 'home',
         name: 'Nav',
         component: Nav
       },
       {
-        path: '/users',
+        path: 'users',
         name: 'Users',
         component: Users
 
       },
       {
-        path: '/roles',
+        path: 'roles',
         name: 'Roles',
         component: Roles
       },
       {
-        path: '/rignt',
+        path: 'rights',
         name: 'Rights',
         component: Rights
 
       },
       {
-        path: '/list',
-        name: 'List',
-        component: List
+        path: 'goods',
+        name: 'Goods',
+        component: Goods,
+        redirect: {
+          name: 'List'
+        },
+        children: [
+          {
+            path: 'list',
+            name: 'List',
+            component: List
+          },
+          {
+            path: 'add',
+            name: 'Add',
+            component: Add
+          }
+        ]
+      },
+
+      {
+        path: 'categories',
+        name: 'Categories',
+        component: Categories
+      },
+      {
+        path: 'params',
+        name: 'Params',
+        component: Params
+      },
+      {
+        path: 'orders',
+        name: 'Orders',
+        component: Orders
+      },
+      {
+        path: 'reports',
+        name: 'Reports',
+        component: Reports
       }
       ]
     }

@@ -7,90 +7,57 @@
           class="logo"
         ></div>
         <el-menu
-          default-active="2"
+          :default-active="$route.path"
           class="el-menu-vertical-demo el-menu-admin"
           @open="handleOpen"
           @close="handleClose"
-         :collapse= "isCollapse"
+          :collapse="isCollapse"
           background-color="#545c64"
           text-color="#fff"
           active-text-color="#ffd04b"
           :unique-opened="true"
           :router='true'
         >
-          <el-submenu index="1">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>用户管理</span>
-            </template>
-
-            <el-menu-item index="users">
-              <i class="el-icon-menu"></i>
-              <span>用户列表</span>
-            </el-menu-item>
-          </el-submenu>
-
-          <el-submenu index="2">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>权限管理</span>
-            </template>
-
-            <el-menu-item index="Rignt"><i class="el-icon-menu"></i>
-              <span>角色列表</span>
-              </el-menu-item>
-              <el-menu-item index="roles">
-                <i class="el-icon-menu"></i>
-                <span>权限列表</span></el-menu-item>
-          </el-submenu>
-           <el-submenu index="3">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>商品管理</span>
-            </template>
-
-            <el-menu-item index="list"><i class="el-icon-menu"></i>
-              <span>商品列表</span>
-              </el-menu-item>
-              <el-menu-item index="3-2">
-                <i class="el-icon-menu"></i>
-                <span>分类参数</span></el-menu-item>
-                 <el-menu-item index="3-3">
-                <i class="el-icon-menu"></i>
-                <span>商品分类</span></el-menu-item>
-          </el-submenu>
-           <el-submenu index="4">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>订单管理</span>
-            </template>
-
-            <el-menu-item index="4-1"><i class="el-icon-menu"></i>
-              <span>订单列表</span>
-              </el-menu-item>
-
-          </el-submenu>
-           <el-submenu index="5">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>数据统计</span>
-            </template>
-
-            <el-menu-item index="5-1"><i class="el-icon-menu"></i>
-              <span>数据报表</span>
-              </el-menu-item>
-          </el-submenu>
+          <div
+            v-for="val in listform"
+            :key='val.id'
+          >
+            <el-submenu :index="val.id+''">
+              <template slot="title">
+                <i class="el-icon-location"></i>
+                <span>{{val.authName}}</span>
+              </template>
+              <div
+                v-for="item in val.children"
+                :key="item.id"
+              >
+                <el-menu-item :index="'/'+item.path">
+                  <i class="el-icon-menu"></i>
+                  <span>{{item.authName}}</span>
+                </el-menu-item>
+              </div>
+            </el-submenu>
+          </div>
         </el-menu>
 
       </div>
     </el-aside>
     <el-container>
       <el-header>
-        <a href="javascript:;" class="myicon myicon-menu toggle-btn" @click='isCollapse=!isCollapse'></a>
+        <a
+          href="javascript:;"
+          class="myicon myicon-menu toggle-btn"
+          @click='isCollapse=!isCollapse'
+        ></a>
         <div class="system-title">欢迎来到管理系统 </div>
-        <div class="welcome">欢迎你: <img src="../assets/bunny_cc1e937.gif" alt=""><span clas='name'>陈十三  </span><span>退出</span></div>
+        <div class="welcome">欢迎你: <img
+            src="../assets/bunny_cc1e937.gif"
+            alt=""
+          ><span clas='name'>chen</span>
+<el-button type="text" @click='logout'>退出</el-button>
+                    </div>
       </el-header>
-      <router-view></router-view>
+       <el-main><router-view></router-view></el-main>
 
     </el-container>
   </el-container>
@@ -99,23 +66,37 @@
 
 <script>
 // import { users } from '@/api/index.js'
-// import { users } from '@/api/index.js'
+import { menusList } from '@/api/index.js'
 
 export default {
   data () {
     return {
-      isCollapse: false
+      isCollapse: false,
+      listform: {}
     }
   },
   mounted () {
-
+    // 获取左侧列表
+    menusList().then(res => {
+      // console.log(res)
+      // 把左侧列表的数据传给list
+      this.listform = res.data
+    })
   },
   methods: {
     handleOpen (key, keyPath) {
-      console.log(keyPath)
+      console.log(key, keyPath)
     },
     handleClose (key, keyPath) {
       console.log(keyPath)
+    },
+    logout () {
+      // redirect: '/login'
+      // console.log(this.$store.state)
+      // 清除token值
+      localStorage.removeItem('userToken')
+      // 实现跳转到登录页面
+      this.$router.push('/login')
     }
   }
 }
@@ -166,11 +147,11 @@ export default {
   }
   .welcome {
     color: #ccc;
-    img{
+    img {
       width: 40px;
     }
-    .name{
-      color: white!important
+    .name {
+      color: white !important;
     }
   }
 }

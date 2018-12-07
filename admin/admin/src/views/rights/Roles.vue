@@ -1,7 +1,7 @@
 <template>
   <div class="box">
     <el-breadcrumb separator="/">
-      <el-breadcrumb-item :to="{ path: 'Nav' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: 'home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>权限管理</el-breadcrumb-item>
       <el-breadcrumb-item>权限列表</el-breadcrumb-item>
     </el-breadcrumb>
@@ -82,6 +82,6 @@ export default {
 <style>
 .box{
     margin: 20px 20px 0;
-    overflow: scroll;
+
 }
 </style>
