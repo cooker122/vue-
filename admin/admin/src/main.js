@@ -13,6 +13,7 @@ import VueQuillEditor from 'vue-quill-editor'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
+
 // 引入vue-amap
 import VueAMap from 'vue-amap'
 Vue.use(VueAMap)
